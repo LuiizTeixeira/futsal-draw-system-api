@@ -27,7 +27,7 @@ services:
         - "5432:5432"
       volumes:
         - postgres:/data/postgres
-        - ./src/main/resources/db/migrations/init:/docker-entrypoint-initdb.d
+        - ./src/main/resources/db/migration/init:/docker-entrypoint-initdb.d
       networks:
         - futsal-draw-system-api-network
       restart: always
