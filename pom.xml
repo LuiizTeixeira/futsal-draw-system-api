@@ -59,7 +59,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <plugins>
             <plugin>
@@ -78,6 +77,5 @@
         </plugins>
         <finalName>futsal-draw-system-api</finalName>
     </build>
-
 
 </project>
