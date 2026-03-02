@@ -1,37 +1,22 @@
-#services:
-# futsal-api:
-#  build: .
-# container_name: futsal-draw-system
-#ports:
-# - "8080:8080"
-#depends_on:
-# - postgres
-#- redis
-#networks:
-#- futsal-draw-system-api-network
-#links:
-#- postgres
-#- redis
-#restart: always
 services:
 
- postgres:
-      image: postgres
-      container_name: futsal-draw-db
-      environment:
-        POSTGRES_USER: ${POSTGRES_USER:-futsal_user}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-futsal_password}
-        POSTGRES_DB: ${POSTGRES_DB:-db_futsal_draw_system_api}
-        PGDATA: /data/postgres
-      ports:
-        - "5432:5432"
-      volumes:
-        - postgres:/data/postgres
-        - ./src/main/resources/db/migration/init:/docker-entrypoint-initdb.d
-      networks:
-        - futsal-draw-system-api-network
-      restart: always
- pgadmin:
+  postgres:
+    image: postgres
+    container_name: futsal-draw-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-futsal_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-futsal_password}
+      POSTGRES_DB: ${POSTGRES_DB:-db_futsal_draw_system_api}
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/data/postgres
+      - ./src/main/resources/db/migration/init:/docker-entrypoint-initdb.d
+    networks:
+      - futsal-draw-system-api-network
+    restart: always
+  pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
     environment:
@@ -53,7 +38,7 @@ networks:
     driver: bridge
 volumes:
 
-    postgres:
-      name: postgres-volume
-    pgadmin:
-      name: pgadmin-volume
+  postgres:
+    name: postgres-volume
+  pgadmin:
+    name: pgadmin-volume
