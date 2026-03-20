@@ -1,5 +1,4 @@
 services:
-
   postgres:
     image: postgres
     container_name: futsal-draw-db
@@ -12,7 +11,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres:/data/postgres
-      - ./src/main/resources/db/migrations/init:/docker-entrypoint-initdb.d
+      - ./src/main/resources/db/migration/init:/docker-entrypoint-initdb.d
     networks:
       - futsal-draw-system-api-network
     restart: always
@@ -33,13 +32,33 @@ services:
     depends_on:
       - postgres
 
+  sonarqube:
+    image: sonarqube
+    hostname: sonarqube
+    container_name: sonarqube
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - "9000:9000"
+    networks:
+      - futsal-draw-system-api-network
+
+
 networks:
   futsal-draw-system-api-network:
     name: futsal-draw-system-api-network
     driver: bridge
 
 volumes:
-    postgres:
-      name: postgres-volume
-    pgAdmin:
-      name: pgadmin-volume
+  postgres:
+    name: postgres-volume
+  pgAdmin:
+    name: pgadmin-volume
+  sonarqube_data:
+    name: sonarqube-data-volume
+  sonarqube_extensions:
+    name: sonarqube-extensions-volume
+  sonarqube_logs:
+    name: sonarqube-logs-volume
