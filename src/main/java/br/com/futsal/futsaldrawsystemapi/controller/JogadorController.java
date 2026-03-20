@@ -4,8 +4,11 @@ import br.com.futsal.futsaldrawsystemapi.dto.JogadorDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import br.com.futsal.futsaldrawsystemapi.service.JogadorService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +24,10 @@ public class JogadorController {
         return modelMapper.map(jogadorService.cadastrarJogador(dto), JogadorDTO.class);
     }
 
+    @GetMapping("/listar")
+    public List<JogadorDTO> listarJogadores() {
+        return jogadorService.listarJogadores();
+    }
 
 }
 
