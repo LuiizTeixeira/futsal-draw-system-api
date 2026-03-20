@@ -1,8 +1,16 @@
 package br.com.futsal.futsaldrawsystemapi.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Builder
-public record ResponseErrorDTO(String error) {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class ResponseErrorDTO {
+    private String error;
 }

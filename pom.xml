@@ -19,6 +19,12 @@
         <sonar.projectKey>LuiizTeixeira_futsal-draw-system-api</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.organization>luiizteixeira</sonar.organization>
+        <jacoco.version>0.8.12</jacoco.version>
+        <sonar.coverage.exclusions>
+            br/com/futsal/futsaldrawsystemapi/config/**,
+            br/com/futsal/futsaldrawsystemapi/FutsalDrawSystemApiApplication.*,
+            **/dto/**
+        </sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -51,24 +57,60 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.44</version>
-            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>3.2.6</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>br/com/futsal/futsaldrawsystemapi/config/**</exclude>
+                        <exclude>br/com/futsal/futsaldrawsystemapi/FutsalDrawSystemApiApplication.class</exclude>
+                        <exclude>**/dto/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -85,16 +127,10 @@
                 </executions>
             </plugin>
 
-
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>5.5.0.6356</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
         <finalName>futsal-draw-system-api</finalName>
