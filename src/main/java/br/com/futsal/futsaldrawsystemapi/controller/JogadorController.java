@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/jogadores")
+@RequestMapping("/jogador")
 public class JogadorController {
 
     private final JogadorService jogadorService;
@@ -25,8 +25,15 @@ public class JogadorController {
     }
 
     @GetMapping("/listar")
+    @ResponseStatus(HttpStatus.OK)
     public List<JogadorDTO> listarJogadores() {
         return jogadorService.listarJogadores();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarJogador(@PathVariable Long id)  {
+        jogadorService.deletarJogador(id);
     }
 
 }

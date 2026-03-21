@@ -2,6 +2,7 @@ package br.com.futsal.futsaldrawsystemapi.service;
 
 import br.com.futsal.futsaldrawsystemapi.dto.JogadorDTO;
 import br.com.futsal.futsaldrawsystemapi.exception.ApiException;
+import br.com.futsal.futsaldrawsystemapi.exception.NotFoundException;
 import br.com.futsal.futsaldrawsystemapi.model.Jogador;
 import br.com.futsal.futsaldrawsystemapi.repository.JogadorRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,7 +25,7 @@ public class JogadorService {
     }
 
     private void validarJogadorExistente(JogadorDTO dto) {
-        if (jogadorRepository.existsByNome(dto.getNome())) {
+        if (Boolean.TRUE.equals(jogadorRepository.existsByNome(dto.getNome()))) {
             throw new ApiException("Jogador já cadastrado");
         }
     }
@@ -34,7 +34,19 @@ public class JogadorService {
         return jogadorRepository.findAll()
                 .stream()
                 .map(jogador -> modelMapper.map(jogador, JogadorDTO.class))
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    public void deletarJogador(Long id) {
+        buscarJogador(id);
+        jogadorRepository.deleteById(id);
+    }
+
+    private Jogador buscarJogador(Long id) {
+        return jogadorRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Jogador não encontrado"));
+
     }
 }
 

@@ -132,6 +132,15 @@
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>5.5.0.6356</version>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/db_futsal_draw_system_api</url>
+                    <user>futsal_user</user>
+                    <password>futsal_password</password>
+                </configuration>
+            </plugin>
         </plugins>
         <finalName>futsal-draw-system-api</finalName>
     </build>
