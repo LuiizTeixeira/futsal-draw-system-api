@@ -1,6 +1,7 @@
 package br.com.futsal.futsaldrawsystemapi.service;
 
 import br.com.futsal.futsaldrawsystemapi.dto.JogadorDTO;
+import br.com.futsal.futsaldrawsystemapi.dto.SorteioRequestDTO;
 import br.com.futsal.futsaldrawsystemapi.exception.ApiException;
 import br.com.futsal.futsaldrawsystemapi.exception.NotFoundException;
 import br.com.futsal.futsaldrawsystemapi.model.Jogador;
@@ -10,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -48,5 +51,44 @@ public class JogadorService {
                 .orElseThrow(() -> new NotFoundException("Jogador não encontrado"));
 
     }
-}
 
+
+    public List<List<JogadorDTO>> sortearTimes(SorteioRequestDTO request) {
+        List<JogadorDTO> participantes = prepararParticipantes(request);
+        Collections.shuffle(participantes);
+        return distribuirEmTimes(participantes, request.getJogadoresPorTime());
+    }
+
+    private List<JogadorDTO> prepararParticipantes(SorteioRequestDTO request) {
+        List<JogadorDTO> lista = new ArrayList<>();
+
+
+        if (request.getIdsJogadoresFixos() != null) {
+            request.getIdsJogadoresFixos().forEach(id -> {
+                Jogador jogador = buscarJogador(id);
+                lista.add(modelMapper.map(jogador, JogadorDTO.class));
+            });
+        }
+
+
+        if (request.getNomesVisitantes() != null) {
+            request.getNomesVisitantes().forEach(nome -> {
+                JogadorDTO visitante = new JogadorDTO();
+                visitante.setNome(nome + " (Visitante)");
+                lista.add(visitante);
+            });
+        }
+
+        return lista;
+    }
+
+    private List<List<JogadorDTO>> distribuirEmTimes(List<JogadorDTO> jogadores, int tamanho) {
+        List<List<JogadorDTO>> times = new ArrayList<>();
+        for (int i = 0; i < jogadores.size(); i += tamanho) {
+            int fim = Math.min(i + tamanho, jogadores.size());
+            times.add(new ArrayList<>(jogadores.subList(i, fim)));
+        }
+        return times;
+    }
+
+}

@@ -1,6 +1,7 @@
 package br.com.futsal.futsaldrawsystemapi.controller;
 
 import br.com.futsal.futsaldrawsystemapi.dto.JogadorDTO;
+import br.com.futsal.futsaldrawsystemapi.dto.SorteioRequestDTO;
 import br.com.futsal.futsaldrawsystemapi.service.JogadorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -79,5 +82,32 @@ class JogadorControllerTest {
                 .andExpect(status().isNoContent());
 
     }
+
+    @Test
+    @DisplayName("Deve sortear times misturando jogadores fixos e visitantes")
+    void deveSortearTimesComSucesso() throws Exception {
+
+        JogadorDTO j1 = new JogadorDTO();
+        j1.setNome("Fixo 1");
+        JogadorDTO j2 = new JogadorDTO();
+        j2.setNome("Fixo 2");
+
+        var salvo1 = jogadorService.cadastrarJogador(j1);
+        var salvo2 = jogadorService.cadastrarJogador(j2);
+
+        SorteioRequestDTO request = SorteioRequestDTO.builder()
+                .idsJogadoresFixos(List.of(salvo1.getId(), salvo2.getId()))
+                .nomesVisitantes(List.of("Visitante A", "Visitante B"))
+                .jogadoresPorTime(2)
+                .build();
+
+        mockMvc.perform(post("/jogador/sortear")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].length()").value(2));
+    }
+
 
 }
