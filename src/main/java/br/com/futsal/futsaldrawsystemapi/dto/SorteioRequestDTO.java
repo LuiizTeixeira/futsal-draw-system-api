@@ -15,6 +15,6 @@ import java.util.List;
 @Builder
 public class SorteioRequestDTO {
     private List<Long> idsJogadoresFixos;
-    private List<String> nomesVisitantes;
+    private List<String> jogadorVisitante;
     private int jogadoresPorTime;
 }

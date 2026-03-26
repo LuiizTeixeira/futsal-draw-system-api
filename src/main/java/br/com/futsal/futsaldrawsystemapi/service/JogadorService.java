@@ -55,6 +55,11 @@ public class JogadorService {
 
     public List<List<JogadorDTO>> sortearTimes(SorteioRequestDTO request) {
         List<JogadorDTO> participantes = prepararParticipantes(request);
+
+        if (participantes.size() < request.getJogadoresPorTime()) {
+            throw new ApiException("Número de jogadores insuficiente para formar um time");
+        }
+
         Collections.shuffle(participantes);
         return distribuirEmTimes(participantes, request.getJogadoresPorTime());
     }
@@ -71,8 +76,8 @@ public class JogadorService {
         }
 
 
-        if (request.getNomesVisitantes() != null) {
-            request.getNomesVisitantes().forEach(nome -> {
+        if (request.getJogadorVisitante() != null) {
+            request.getJogadorVisitante().forEach(nome -> {
                 JogadorDTO visitante = new JogadorDTO();
                 visitante.setNome(nome + " (Visitante)");
                 lista.add(visitante);

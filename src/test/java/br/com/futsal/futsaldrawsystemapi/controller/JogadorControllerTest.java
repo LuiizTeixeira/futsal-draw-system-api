@@ -84,8 +84,8 @@ class JogadorControllerTest {
     }
 
     @Test
-    @DisplayName("Deve sortear times misturando jogadores fixos e visitantes")
-    void deveSortearTimesComSucesso() throws Exception {
+    @DisplayName(" sortear times jogadores fixos e visitantes")
+    void SortearTimes() throws Exception {
 
         JogadorDTO j1 = new JogadorDTO();
         j1.setNome("Fixo 1");
@@ -97,7 +97,7 @@ class JogadorControllerTest {
 
         SorteioRequestDTO request = SorteioRequestDTO.builder()
                 .idsJogadoresFixos(List.of(salvo1.getId(), salvo2.getId()))
-                .nomesVisitantes(List.of("Visitante A", "Visitante B"))
+                .jogadorVisitante(List.of("Visitante A", "Visitante B"))
                 .jogadoresPorTime(2)
                 .build();
 
@@ -107,6 +107,20 @@ class JogadorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].length()").value(2));
+    }
+
+    @Test
+    @DisplayName("Erro jogadores Insuficientes")
+    void ErroJogadoresInsuficientes() throws Exception {
+        SorteioRequestDTO request = SorteioRequestDTO.builder()
+                .jogadorVisitante(List.of("Apenas 1"))
+                .jogadoresPorTime(5)
+                .build();
+
+        mockMvc.perform(post("/jogador/sortear")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
     }
 
 
