@@ -1,6 +1,7 @@
 package br.com.futsal.futsaldrawsystemapi.controller;
 
 import br.com.futsal.futsaldrawsystemapi.dto.JogadorDTO;
+import br.com.futsal.futsaldrawsystemapi.dto.SorteioRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/jogadores")
+@RequestMapping("/jogador")
 public class JogadorController {
 
     private final JogadorService jogadorService;
@@ -25,9 +26,23 @@ public class JogadorController {
     }
 
     @GetMapping("/listar")
+    @ResponseStatus(HttpStatus.OK)
     public List<JogadorDTO> listarJogadores() {
         return jogadorService.listarJogadores();
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarJogador(@PathVariable Long id) {
+        jogadorService.deletarJogador(id);
+    }
+
+    @PostMapping("/sortear")
+    @ResponseStatus(HttpStatus.OK)
+    public List<List<JogadorDTO>> sortear(@RequestBody SorteioRequestDTO request) {
+        return jogadorService.sortearTimes(request);
+    }
+
 
 }
 

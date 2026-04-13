@@ -1,6 +1,7 @@
 package br.com.futsal.futsaldrawsystemapi.controller;
 
 import br.com.futsal.futsaldrawsystemapi.dto.JogadorDTO;
+import br.com.futsal.futsaldrawsystemapi.dto.SorteioRequestDTO;
 import br.com.futsal.futsaldrawsystemapi.service.JogadorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -13,6 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,7 +43,7 @@ class JogadorControllerTest {
         JogadorDTO dto = new JogadorDTO();
         dto.setNome("ThomZão");
 
-        mockMvc.perform(post("/jogadores/cadastrar")
+        mockMvc.perform(post("/jogador/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
@@ -56,10 +60,68 @@ class JogadorControllerTest {
         jogadorService.cadastrarJogador(dto);
 
 
-        mockMvc.perform(get("/jogadores/listar")
+        mockMvc.perform(get("/jogador/listar")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Falcão"));
     }
+
+
+    @Test
+    @DisplayName("Deve deletar um jogador existente e retornar 204")
+    void deveDeletarJogador() throws Exception {
+        JogadorDTO dto = new JogadorDTO();
+        dto.setNome("Jogador para Deletar");
+        var jogadorSalvo = jogadorService.cadastrarJogador(dto);
+        Long idExistente = jogadorSalvo.getId();
+
+
+        mockMvc.perform(delete("/jogador/{id}", idExistente)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    @DisplayName(" sortear times jogadores fixos e visitantes")
+    void SortearTimes() throws Exception {
+
+        JogadorDTO j1 = new JogadorDTO();
+        j1.setNome("Fixo 1");
+        JogadorDTO j2 = new JogadorDTO();
+        j2.setNome("Fixo 2");
+
+        var salvo1 = jogadorService.cadastrarJogador(j1);
+        var salvo2 = jogadorService.cadastrarJogador(j2);
+
+        SorteioRequestDTO request = SorteioRequestDTO.builder()
+                .idsJogadoresFixos(List.of(salvo1.getId(), salvo2.getId()))
+                .jogadorVisitante(List.of("Visitante A", "Visitante B"))
+                .jogadoresPorTime(2)
+                .build();
+
+        mockMvc.perform(post("/jogador/sortear")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].length()").value(2));
+    }
+
+    @Test
+    @DisplayName("Erro jogadores Insuficientes")
+    void ErroJogadoresInsuficientes() throws Exception {
+        SorteioRequestDTO request = SorteioRequestDTO.builder()
+                .jogadorVisitante(List.of("Apenas 1"))
+                .jogadoresPorTime(5)
+                .build();
+
+        mockMvc.perform(post("/jogador/sortear")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+
 }
