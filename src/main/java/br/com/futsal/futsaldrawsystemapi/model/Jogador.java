@@ -1,11 +1,6 @@
 package br.com.futsal.futsaldrawsystemapi.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -20,12 +15,12 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "JOGADOR")
+@Table(name = "JOGADOR", schema = "FUTSAL")
 public class Jogador {
 
     @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_jogador")
+    @SequenceGenerator(name = "sq_jogador", sequenceName = "sq_jogador", allocationSize = 1)
     @Column(name = "ID")
     private Long id;
 

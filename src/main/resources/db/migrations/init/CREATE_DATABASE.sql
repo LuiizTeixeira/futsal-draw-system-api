@@ -1,1 +1,0 @@
-CREATE DATABASE db_futsal_draw_system_api;
