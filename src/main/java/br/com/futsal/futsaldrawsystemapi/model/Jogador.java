@@ -27,4 +27,13 @@ public class Jogador {
     @Column(name = "NOME")
     private String nome;
 
+    @Column(name = "HABILIDADE")
+    private Integer habilidade;
+
+    @Column(name = "NUMERO")
+    private Integer numero;
+
+    @Column(name = "PRESENCA")
+    private String presenca;
+
 }
