@@ -139,6 +139,7 @@
                     <url>jdbc:postgresql://aws-1-us-west-2.pooler.supabase.com/postgres</url>
                     <user>postgres.vrkjotzsnspdjlbrzegf</user>
                     <password>FutsalProject.131</password>
+                    <schemas>futsal</schemas>
                 </configuration>
             </plugin>
         </plugins>
