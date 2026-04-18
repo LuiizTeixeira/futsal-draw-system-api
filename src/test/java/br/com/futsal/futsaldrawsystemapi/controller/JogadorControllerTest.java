@@ -56,11 +56,13 @@ class JogadorControllerTest {
 
         JogadorDTO dto = new JogadorDTO();
         dto.setNome("Falcão");
+        dto.setHabilidade(5);
+        dto.setPresenca("S");
 
         jogadorService.cadastrarJogador(dto);
 
 
-        mockMvc.perform(get("/jogador/listar")
+        mockMvc.perform(get("/jogador")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
@@ -89,8 +91,13 @@ class JogadorControllerTest {
 
         JogadorDTO j1 = new JogadorDTO();
         j1.setNome("Fixo 1");
+        j1.setHabilidade(5);
+        j1.setPresenca("S");
+
         JogadorDTO j2 = new JogadorDTO();
         j2.setNome("Fixo 2");
+        j2.setHabilidade(5);
+        j2.setPresenca("S");
 
         var salvo1 = jogadorService.cadastrarJogador(j1);
         var salvo2 = jogadorService.cadastrarJogador(j2);
@@ -122,6 +129,4 @@ class JogadorControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
-
-
 }

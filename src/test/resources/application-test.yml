@@ -14,3 +14,11 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: true
+    default-schema: futsal
+    create-schemas: true
+
+  logging:
+    level:
+      org.hibernate.orm.jdbc.bind: TRACE
+      org.hibernate.SQL: DEBUG
+      org.hibernate.orm.jdbc.extract: TRACE

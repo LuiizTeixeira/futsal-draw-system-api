@@ -14,5 +14,8 @@ import lombok.Setter;
 public class JogadorDTO {
     private Long id;
     private String nome;
+    private Integer habilidade;
+    private Integer numero;
+    private String presenca;
 }
 

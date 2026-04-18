@@ -25,7 +25,7 @@ public class JogadorController {
         return modelMapper.map(jogadorService.cadastrarJogador(dto), JogadorDTO.class);
     }
 
-    @GetMapping("/listar")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<JogadorDTO> listarJogadores() {
         return jogadorService.listarJogadores();

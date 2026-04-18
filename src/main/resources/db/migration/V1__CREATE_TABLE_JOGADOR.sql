@@ -1,0 +1,8 @@
+CREATE TABLE futsal.jogador
+(
+    id BIGINT PRIMARY KEY,
+    nome VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE SEQUENCE futsal.sq_jogador START WITH 1 INCREMENT BY 1;
+

@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <version>42.7.2</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -136,9 +136,10 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:5432/db_futsal_draw_system_api</url>
-                    <user>futsal_user</user>
-                    <password>futsal_password</password>
+                    <url>jdbc:postgresql://aws-1-us-west-2.pooler.supabase.com/postgres</url>
+                    <user>postgres.vrkjotzsnspdjlbrzegf</user>
+                    <password>FutsalProject.131</password>
+                    <schemas>futsal</schemas>
                 </configuration>
             </plugin>
         </plugins>

@@ -29,6 +29,7 @@ class JogadorServiceTest {
     void salvarJogador() {
         JogadorDTO dto = new JogadorDTO();
         dto.setNome("Luiz");
+        dto.setHabilidade(5);
 
         Jogador salvo = jogadorService.cadastrarJogador(dto);
 
@@ -42,6 +43,7 @@ class JogadorServiceTest {
     void JogadorDuplicado() {
         JogadorDTO dto = new JogadorDTO();
         dto.setNome("Danilo");
+        dto.setHabilidade(5);
 
         jogadorService.cadastrarJogador(dto);
 
