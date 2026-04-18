@@ -20,7 +20,7 @@ public class Jogador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_jogador")
-    @SequenceGenerator(name = "sq_jogador", sequenceName = "sq_jogador", allocationSize = 1)
+    @SequenceGenerator(name = "sq_jogador", sequenceName = "FUTSAL.SQ_JOGADOR", allocationSize = 1)
     @Column(name = "ID")
     private Long id;
 
